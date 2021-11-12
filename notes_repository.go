@@ -44,7 +44,7 @@ func (nr *NoteRepository) Insert(note Note) (uint, bool) {
 func (nr *NoteRepository) Update(id uint, note Note) (uint, bool) {
 	newNote := CopyNote(&note)
 	newNote.ID = id
-	result := nr.db.Set(string(rune(id)), &newNote)
+	result := nr.db.Save(&newNote)
 	if result.Error != nil {
 		return 0, false
 	}
