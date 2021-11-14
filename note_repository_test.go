@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql/driver"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -15,13 +14,6 @@ type NoteRepositoryTestSuite struct {
 	suite.Suite
 	noteRepository NoteRepository
 	mock           sqlmock.Sqlmock
-}
-
-type Id uint
-
-func (x Id) Match(v driver.Value) bool {
-	_, ok := v.(uint)
-	return ok
 }
 
 func (ts *NoteRepositoryTestSuite) SetupTest() {
@@ -146,7 +138,6 @@ func (ts *NoteRepositoryTestSuite) TestNoteRepository_Create_failed() {
 	assert.Equal(ts.T(), false, actualOk)
 	assert.Equal(ts.T(), UNSPECIFIED_ID, actualId)
 }
-
 
 func TestNoteRepositoryTestSuite(t *testing.T) {
 	suite.Run(t, new(NoteRepositoryTestSuite))
