@@ -9,7 +9,7 @@ import (
 type INoteRepository interface {
 	GetAll() []Note
 	GetById(id uint) (Note, bool)
-	Insert(note Note) (uint, bool)
+	Create(note Note) (uint, bool)
 	Update(id uint, note Note) (uint, bool)
 	Delete(id uint) bool
 }
@@ -33,7 +33,7 @@ func (nr *NoteRepository) GetById(id uint) (Note, bool) {
 	return note, true
 }
 
-func (nr *NoteRepository) Insert(note Note) (uint, bool) {
+func (nr *NoteRepository) Create(note Note) (uint, bool) {
 	result := nr.db.Create(&note)
 	if result.Error != nil {
 		return 0, false
@@ -42,9 +42,7 @@ func (nr *NoteRepository) Insert(note Note) (uint, bool) {
 }
 
 func (nr *NoteRepository) Update(id uint, note Note) (uint, bool) {
-	newNote := CopyNote(&note)
-	newNote.ID = id
-	result := nr.db.Save(&newNote)
+	result := nr.db.Model(&Note{ID: id}).Updates(note)
 	if result.Error != nil {
 		return 0, false
 	}
@@ -52,6 +50,8 @@ func (nr *NoteRepository) Update(id uint, note Note) (uint, bool) {
 }
 
 func (nr *NoteRepository) Delete(id uint) bool {
-	result := nr.db.Delete(&Note{}, id)
-	return result.RowsAffected > 0
+	if result := nr.db.Delete(&Note{}, id); result.Error != nil {
+		return false
+	}
+	return true
 }

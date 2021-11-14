@@ -63,37 +63,6 @@ paths:
           description: "Invalid input"
           schema:
             $ref: "#/definitions/ApiResponse"
-          
-    put:
-      tags:
-      - "notes"
-      summary: "Update an existing note"
-      description: ""
-      operationId: "updateNote"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Note object that needs to be added"
-        required: true
-        schema:
-          $ref: "#/definitions/Note"
-      responses:
-        "200":
-          description: "Successfully updated"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "400":
-          description: "Invalid ID supplied"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        "404":
-          description: "Note not found"
-          schema:
-            $ref: "#/definitions/ApiResponse"
      
   /notes/{noteId}:
     get:
@@ -118,6 +87,43 @@ paths:
             $ref: "#/definitions/Note"
         "400":
           description: "Invalid ID supplied"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "404":
+          description: "Note not found"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+          
+    put:
+      tags:
+      - "notes"
+      summary: "Update an existing note"
+      description: ""
+      operationId: "updateNote"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "noteId"
+        in: "path"
+        description: "ID of note to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Note object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/Note"
+      responses:
+        "200":
+          description: "Successfully updated"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        "400":
+          description: "Invalid ID or request body supplied"
           schema:
             $ref: "#/definitions/ApiResponse"
         "404":

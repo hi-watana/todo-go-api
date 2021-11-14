@@ -23,7 +23,7 @@ func main() {
 
 	router.GET("/notes", noteController.Get)
 	router.GET("/notes/:id", noteController.GetById)
-	router.POST("/notes", noteController.Insert)
+	router.POST("/notes", noteController.Create)
 	router.PUT("/notes/:id", noteController.Update)
 	router.DELETE("/notes/:id", noteController.Delete)
 

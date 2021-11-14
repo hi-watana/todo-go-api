@@ -1,10 +1,14 @@
 package main
 
+const (
+	UNSPECIFIED_ID uint = 0
+)
+
 type INoteService interface {
 	Get() []Note
 	GetById(id uint) (Note, bool)
-	Insert(note Note) (uint, bool)
-	Update(id uint, note Note) (uint, bool)
+	Create(note Note) (uint, error)
+	Update(id uint, note Note) (uint, error)
 	Delete(id uint) bool
 }
 
@@ -22,14 +26,28 @@ func (ns *NoteService) GetById(id uint) (Note, bool) {
 	return note, found
 }
 
-func (ns *NoteService) Insert(note Note) (uint, bool) {
-	id, ok := ns.noteRepository.Insert(note)
-	return id, ok
+func (ns *NoteService) Create(note Note) (uint, error) {
+	if note.ID != UNSPECIFIED_ID {
+		return UNSPECIFIED_ID, &IllegalIdError{}
+	}
+
+	id, ok := ns.noteRepository.Create(note)
+	if !ok {
+		return UNSPECIFIED_ID, &InternalError{}
+	}
+	return id, nil
 }
 
-func (ns *NoteService) Update(id uint, note Note) (uint, bool) {
+func (ns *NoteService) Update(id uint, note Note) (uint, error) {
+	if note.ID != 0 && note.ID != id {
+		return UNSPECIFIED_ID, &IllegalIdError{}
+	}
+
 	id, ok := ns.noteRepository.Update(id, note)
-	return id, ok
+	if !ok {
+		return UNSPECIFIED_ID, &InternalError{}
+	}
+	return id, nil
 }
 
 func (ns *NoteService) Delete(id uint) bool {

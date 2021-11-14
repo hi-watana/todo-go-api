@@ -5,8 +5,3 @@ type Note struct {
 	Title string
 	Content string
 }
-
-func CopyNote(note *Note) Note {
-	newNote := Note{note.ID, note.Title, note.Content}
-	return newNote
-}

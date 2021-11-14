@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -10,7 +11,7 @@ import (
 type INoteController interface {
 	Get(c *gin.Context)
 	GetById(c *gin.Context)
-	Insert(c *gin.Context)
+	Create(c *gin.Context)
 	Update(c *gin.Context)
 	Delete(c *gin.Context)
 }
@@ -50,14 +51,21 @@ func (nc *NoteController) GetById(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, note)
 }
 
-func (nc *NoteController) Insert(c *gin.Context) {
+func (nc *NoteController) Create(c *gin.Context) {
 	var note Note
 	if err := c.BindJSON(&note); err != nil {
 		response := ApiResponse{400, "Invalid request body"}
 		c.IndentedJSON(http.StatusBadRequest, response)
 		return
 	}
-	if _, inserted := nc.noteService.Insert(note); !inserted {
+
+	_, err := nc.noteService.Create(note)
+	if errors.Is(err, &IllegalIdError{}) {
+		response := ApiResponse{400, "ID must not be specified"}
+		c.IndentedJSON(http.StatusBadRequest, response)
+		return
+	}
+	if errors.Is(err, &InternalError{}) {
 		response := ApiResponse{500, "Failed to insert data"}
 		c.IndentedJSON(http.StatusInternalServerError, response)
 		return
@@ -81,7 +89,19 @@ func (nc *NoteController) Update(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, response)
 		return
 	}
-	if _, inserted := nc.noteService.Update(id, note); !inserted {
+
+	if _, found := nc.noteService.GetById(id); !found {
+		response := ApiResponse{404, "Not found"}
+		c.IndentedJSON(http.StatusNotFound, response)
+		return
+	}
+	_, err = nc.noteService.Update(id, note)
+	if errors.Is(err, &IllegalIdError{}) {
+		response := ApiResponse{400, "Illegal ID in request body"}
+		c.IndentedJSON(http.StatusBadRequest, response)
+		return
+	}
+	if errors.Is(err, &InternalError{}) {
 		response := ApiResponse{500, "Failed to update data"}
 		c.IndentedJSON(http.StatusInternalServerError, response)
 		return
@@ -98,9 +118,14 @@ func (nc *NoteController) Delete(c *gin.Context) {
 		c.IndentedJSON(http.StatusBadRequest, response)
 		return
 	}
-	if deleted := nc.noteService.Delete(id); !deleted {
+	if _, found := nc.noteService.GetById(id); !found {
 		response := ApiResponse{404, "Not found"}
 		c.IndentedJSON(http.StatusNotFound, response)
+		return
+	}
+	if deleted := nc.noteService.Delete(id); !deleted {
+		response := ApiResponse{500, "Failed to delete data"}
+		c.IndentedJSON(http.StatusInternalServerError, response)
 		return
 	}
 	response := ApiResponse{200, "Success"}
