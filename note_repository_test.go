@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/hi-watana/go-sqlmock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"gorm.io/driver/postgres"
@@ -137,6 +137,80 @@ func (ts *NoteRepositoryTestSuite) TestNoteRepository_Create_failed() {
 
 	assert.Equal(ts.T(), false, actualOk)
 	assert.Equal(ts.T(), UNSPECIFIED_ID, actualId)
+}
+
+func (ts *NoteRepositoryTestSuite) TestNoteRepository_Update_success() {
+	var (
+		id   uint = 1
+		note      = Note{
+			Title:   "test_title",
+			Content: "test_content",
+		}
+	)
+	ts.mock.ExpectBegin()
+	ts.mock.ExpectCommit()
+	query := ts.noteRepository.db.Session(&gorm.Session{DryRun: true}).Model(&Note{ID: id}).Updates(note).Statement.SQL.String()
+	ts.mock.ExpectBegin()
+	ts.mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(0, 1))
+	ts.mock.ExpectCommit()
+
+	actualId, actualOk := ts.noteRepository.Update(id, note)
+
+	assert.Equal(ts.T(), true, actualOk)
+	assert.Equal(ts.T(), id, actualId)
+}
+
+func (ts *NoteRepositoryTestSuite) TestNoteRepository_Update_failed() {
+	var (
+		id   uint = 1
+		note      = Note{
+			Title:   "test_title",
+			Content: "test_content",
+		}
+	)
+	ts.mock.ExpectBegin()
+	ts.mock.ExpectCommit()
+	query := ts.noteRepository.db.Session(&gorm.Session{DryRun: true}).Model(&Note{ID: id}).Updates(note).Statement.SQL.String()
+	ts.mock.ExpectBegin()
+	ts.mock.ExpectExec(query).WillReturnError(gorm.ErrInvalidDB)
+	ts.mock.ExpectRollback()
+
+	actualId, actualOk := ts.noteRepository.Update(id, note)
+
+	assert.Equal(ts.T(), false, actualOk)
+	assert.Equal(ts.T(), UNSPECIFIED_ID, actualId)
+}
+
+func (ts *NoteRepositoryTestSuite) TestNoteRepository_Delete_success() {
+	var (
+		id uint = 1
+	)
+	ts.mock.ExpectBegin()
+	ts.mock.ExpectCommit()
+	query := ts.noteRepository.db.Session(&gorm.Session{DryRun: true}).Delete(&Note{}, id).Statement.SQL.String()
+	ts.mock.ExpectBegin()
+	ts.mock.ExpectExec(query).WillReturnResult(sqlmock.NewResult(0, 1))
+	ts.mock.ExpectCommit()
+
+	actualOk := ts.noteRepository.Delete(id)
+
+	assert.Equal(ts.T(), true, actualOk)
+}
+
+func (ts *NoteRepositoryTestSuite) TestNoteRepository_Delete_failed() {
+	var (
+		id uint = 1
+	)
+	ts.mock.ExpectBegin()
+	ts.mock.ExpectCommit()
+	query := ts.noteRepository.db.Session(&gorm.Session{DryRun: true}).Delete(&Note{}, id).Statement.SQL.String()
+	ts.mock.ExpectBegin()
+	ts.mock.ExpectExec(query).WillReturnError(gorm.ErrInvalidDB)
+	ts.mock.ExpectCommit()
+
+	actualOk := ts.noteRepository.Delete(id)
+
+	assert.Equal(ts.T(), false, actualOk)
 }
 
 func TestNoteRepositoryTestSuite(t *testing.T) {
