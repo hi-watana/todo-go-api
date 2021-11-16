@@ -3,7 +3,7 @@ package main
 import (
 	"testing"
 
-	"github.com/hi-watana/go-sqlmock"
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"gorm.io/driver/postgres"
