@@ -1,9 +1,12 @@
 test_name: Normal case scenario
 
+includes:
+  - !include includes.yml
+
 stages:
   - name: Confirm no note is stored
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: GET
     response:
       status_code: 200
@@ -12,7 +15,7 @@ stages:
 
   - name: Create a new note
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: POST
       json:
         title: "title 1"
@@ -25,7 +28,7 @@ stages:
 
   - name: Confirm a note was created
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: GET
     response:
       status_code: 200
@@ -39,7 +42,7 @@ stages:
     
   - name: Create another note
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: POST
       json:
         title: "title 2"
@@ -52,7 +55,7 @@ stages:
 
   - name: Confirm two notes are stored
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: GET
     response:
       status_code: 200
@@ -69,7 +72,7 @@ stages:
   
   - name: Get note No.2
     request:
-      url: http://localhost:8080/notes/{id2}
+      url: "{base_url:s}/notes/{id2:d}"
       method: GET
     response:
       status_code: 200
@@ -80,7 +83,7 @@ stages:
 
   - name: Update note No.1
     request:
-      url: http://localhost:8080/notes/{id1}
+      url: "{base_url:s}/notes/{id1:d}"
       method: PUT
       json:
         title: "new title 1"
@@ -93,7 +96,7 @@ stages:
 
   - name: Confirm note No.1 was updated
     request:
-      url: http://localhost:8080/notes/{id1}
+      url: "{base_url:s}/notes/{id1:d}"
       method: GET
     response:
       status_code: 200
@@ -104,7 +107,7 @@ stages:
 
   - name: Delete note No.1
     request:
-      url: http://localhost:8080/notes/{id1}
+      url: "{base_url:s}/notes/{id1:d}"
       method: DELETE
     response:
       status_code: 200
@@ -114,7 +117,7 @@ stages:
 
   - name: Confirm note No.1 does not exist
     request:
-      url: http://localhost:8080/notes/{id1}
+      url: "{base_url:s}/notes/{id1:d}"
       method: GET
     response:
       status_code: 404
@@ -124,7 +127,7 @@ stages:
 
   - name: Delete note No.2
     request:
-      url: http://localhost:8080/notes/{id2}
+      url: "{base_url:s}/notes/{id2:d}"
       method: DELETE
     response:
       status_code: 200
@@ -134,7 +137,7 @@ stages:
 
   - name: Confirm note No.2 does not exist
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: GET
     response:
       status_code: 200

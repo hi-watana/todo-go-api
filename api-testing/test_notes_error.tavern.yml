@@ -1,9 +1,12 @@
 test_name: Normal case scenario
 
+includes:
+  - !include includes.yml
+
 stages:
   - name: Get by invalid ID
     request:
-      url: http://localhost:8080/notes/xxx
+      url: "{base_url:s}/notes/xxx"
       method: GET
     response:
       status_code: 400
@@ -13,7 +16,7 @@ stages:
 
   - name: Try to get a note but not found
     request:
-      url: http://localhost:8080/notes/3
+      url: "{base_url:s}/notes/3"
       method: GET
     response:
       status_code: 404
@@ -23,7 +26,7 @@ stages:
 
   - name: Create with invalid request body
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: POST
     response:
       status_code: 400
@@ -33,7 +36,7 @@ stages:
     
   - name: ID must not be specified when trying to create a note
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: POST
       json:
         id: 2
@@ -47,7 +50,7 @@ stages:
 
   - name: Try to update a note but not found
     request:
-      url: http://localhost:8080/notes/3
+      url: "{base_url:s}/notes/3"
       method: PUT
       json:
         title: title 3
@@ -60,7 +63,7 @@ stages:
   
   - name: Update with invalid ID
     request:
-      url: http://localhost:8080/notes/xxx
+      url: "{base_url:s}/notes/xxx"
       method: PUT
       json:
         title: title
@@ -73,7 +76,7 @@ stages:
   
   - name: Update with invalid request body
     request:
-      url: http://localhost:8080/notes/3
+      url: "{base_url:s}/notes/3"
       method: PUT
     response:
       status_code: 400
@@ -83,7 +86,7 @@ stages:
 
   - name: Delete by invalid ID
     request:
-      url: http://localhost:8080/notes/xxx
+      url: "{base_url:s}/notes/xxx"
       method: DELETE
     response:
       status_code: 400
@@ -93,7 +96,7 @@ stages:
 
   - name: Try to delete a note but not found
     request:
-      url: http://localhost:8080/notes/3
+      url: "{base_url:s}/notes/3"
       method: DELETE
     response:
       status_code: 404
@@ -103,7 +106,7 @@ stages:
 
   - name: (Preparation) Create a note
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: POST
       json:
         title: "title 1"
@@ -116,7 +119,7 @@ stages:
   
   - name: (Preparation) Create another note
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: POST
       json:
         title: "title 2"
@@ -129,7 +132,7 @@ stages:
   
   - name: (Preparation) Get notes
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: GET
     response:
       status_code: 200
@@ -147,7 +150,7 @@ stages:
 
   - name: (Preparation) Delete another note
     request:
-      url: http://localhost:8080/notes/{another_id}
+      url: "{base_url:s}/notes/{another_id:d}"
       method: DELETE
     response:
       status_code: 200
@@ -157,7 +160,7 @@ stages:
 
   - name: Try to update a note but illegal ID is in request body
     request:
-      url: http://localhost:8080/notes/{target_id}
+      url: "{base_url:s}/notes/{target_id:d}"
       method: PUT
       json:
         id: !int "{another_id:d}"
@@ -171,7 +174,7 @@ stages:
 
   - name: (Post Process) Delete a note
     request:
-      url: http://localhost:8080/notes/{target_id}
+      url: "{base_url:s}/notes/{target_id:d}"
       method: DELETE
     response:
       status_code: 200
@@ -181,7 +184,7 @@ stages:
 
   - name: (Post Process) Confirm there is no note
     request:
-      url: http://localhost:8080/notes
+      url: "{base_url:s}/notes"
       method: GET
     response:
       status_code: 200
