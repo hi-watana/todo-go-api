@@ -1,0 +1,142 @@
+test_name: Normal case scenario
+
+stages:
+  - name: Confirm no note is stored
+    request:
+      url: http://localhost:8080/notes
+      method: GET
+    response:
+      status_code: 200
+      json:
+        []
+
+  - name: Create a new note
+    request:
+      url: http://localhost:8080/notes
+      method: POST
+      json:
+        title: "title 1"
+        content: "content 1"
+    response:
+      status_code: 200
+      json:
+        status: 200
+        message: "Success"
+
+  - name: Confirm a note was created
+    request:
+      url: http://localhost:8080/notes
+      method: GET
+    response:
+      status_code: 200
+      json:
+        - id: !anyint
+          title: "title 1"
+          content: "content 1"
+      save:
+        json:
+          id1: "[0].id"
+    
+  - name: Create another note
+    request:
+      url: http://localhost:8080/notes
+      method: POST
+      json:
+        title: "title 2"
+        content: "content 2"
+    response:
+      status_code: 200
+      json:
+        status: 200
+        message: "Success"
+
+  - name: Confirm two notes are stored
+    request:
+      url: http://localhost:8080/notes
+      method: GET
+    response:
+      status_code: 200
+      json:
+        - id: !int "{id1:d}"
+          title: "title 1"
+          content: "content 1"
+        - id: !anyint
+          title: "title 2"
+          content: "content 2"
+      save:
+        json:
+          id2: "[1].id"
+  
+  - name: Get note No.2
+    request:
+      url: http://localhost:8080/notes/{id2}
+      method: GET
+    response:
+      status_code: 200
+      json:
+        id: !int "{id2:d}"
+        title: "title 2"
+        content: "content 2"
+
+  - name: Update note No.1
+    request:
+      url: http://localhost:8080/notes/{id1}
+      method: PUT
+      json:
+        title: "new title 1"
+        content: "new content 1"
+    response:
+      status_code: 200
+      json:
+        status: 200
+        message: "Success"
+
+  - name: Confirm note No.1 was updated
+    request:
+      url: http://localhost:8080/notes/{id1}
+      method: GET
+    response:
+      status_code: 200
+      json:
+        id: !int "{id1:d}"
+        title: "new title 1"
+        content: "new content 1"
+
+  - name: Delete note No.1
+    request:
+      url: http://localhost:8080/notes/{id1}
+      method: DELETE
+    response:
+      status_code: 200
+      json:
+        status: 200
+        message: "Success"
+
+  - name: Confirm note No.1 does not exist
+    request:
+      url: http://localhost:8080/notes/{id1}
+      method: GET
+    response:
+      status_code: 404
+      json:
+        status: 404
+        message: "Not found"
+
+  - name: Delete note No.2
+    request:
+      url: http://localhost:8080/notes/{id2}
+      method: DELETE
+    response:
+      status_code: 200
+      json:
+        status: 200
+        message: "Success"
+
+  - name: Confirm note No.2 does not exist
+    request:
+      url: http://localhost:8080/notes
+      method: GET
+    response:
+      status_code: 200
+      json:
+        []

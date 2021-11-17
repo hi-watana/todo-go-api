@@ -1,7 +1,7 @@
 package main
 
 type Note struct {
-	ID uint `gorm:"primaryKey"`
-	Title string
-	Content string
+	ID uint `gorm:"primaryKey" json:"id"`
+	Title string `json:"title"`
+	Content string `json:"content"`
 }

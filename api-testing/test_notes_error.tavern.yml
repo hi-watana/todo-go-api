@@ -1,0 +1,189 @@
+test_name: Normal case scenario
+
+stages:
+  - name: Get by invalid ID
+    request:
+      url: http://localhost:8080/notes/xxx
+      method: GET
+    response:
+      status_code: 400
+      json:
+        status: 400
+        message: Invalid ID
+
+  - name: Try to get a note but not found
+    request:
+      url: http://localhost:8080/notes/3
+      method: GET
+    response:
+      status_code: 404
+      json:
+        status: 404
+        message: Not found
+
+  - name: Create with invalid request body
+    request:
+      url: http://localhost:8080/notes
+      method: POST
+    response:
+      status_code: 400
+      json:
+        status: 400
+        message: Invalid request body
+    
+  - name: ID must not be specified when trying to create a note
+    request:
+      url: http://localhost:8080/notes
+      method: POST
+      json:
+        id: 2
+        title: title 2
+        content: content 2
+    response:
+      status_code: 400
+      json:
+        status: 400
+        message: ID must not be specified
+
+  - name: Try to update a note but not found
+    request:
+      url: http://localhost:8080/notes/3
+      method: PUT
+      json:
+        title: title 3
+        content: content 3
+    response:
+      status_code: 404
+      json:
+        status: 404
+        message: Not found
+  
+  - name: Update with invalid ID
+    request:
+      url: http://localhost:8080/notes/xxx
+      method: PUT
+      json:
+        title: title
+        content: content
+    response:
+      status_code: 400
+      json:
+        status: 400
+        message: Invalid ID
+  
+  - name: Update with invalid request body
+    request:
+      url: http://localhost:8080/notes/3
+      method: PUT
+    response:
+      status_code: 400
+      json:
+        status: 400
+        message: Invalid request body
+
+  - name: Delete by invalid ID
+    request:
+      url: http://localhost:8080/notes/xxx
+      method: DELETE
+    response:
+      status_code: 400
+      json:
+        status: 400
+        message: Invalid ID
+
+  - name: Try to delete a note but not found
+    request:
+      url: http://localhost:8080/notes/3
+      method: DELETE
+    response:
+      status_code: 404
+      json:
+        status: 404
+        message: Not found
+
+  - name: (Preparation) Create a note
+    request:
+      url: http://localhost:8080/notes
+      method: POST
+      json:
+        title: "title 1"
+        content: "content 1"
+    response:
+      status_code: 200
+      json:
+        status: 200
+        message: "Success"
+  
+  - name: (Preparation) Create another note
+    request:
+      url: http://localhost:8080/notes
+      method: POST
+      json:
+        title: "title 2"
+        content: "content 2"
+    response:
+      status_code: 200
+      json:
+        status: 200
+        message: "Success"
+  
+  - name: (Preparation) Get notes
+    request:
+      url: http://localhost:8080/notes
+      method: GET
+    response:
+      status_code: 200
+      json:
+        - id: !anyint
+          title: "title 1"
+          content: "content 1"
+        - id: !anyint
+          title: "title 2"
+          content: "content 2"
+      save:
+        json:
+          target_id: "[0].id"
+          another_id: "[1].id"
+
+  - name: (Preparation) Delete another note
+    request:
+      url: http://localhost:8080/notes/{another_id}
+      method: DELETE
+    response:
+      status_code: 200
+      json:
+        status: 200
+        message: "Success"
+
+  - name: Try to update a note but illegal ID is in request body
+    request:
+      url: http://localhost:8080/notes/{target_id}
+      method: PUT
+      json:
+        id: !int "{another_id:d}"
+        title: title
+        content: content
+    response:
+      status_code: 400
+      json:
+        status: 400
+        message: "Illegal ID in request body"
+
+  - name: (Post Process) Delete a note
+    request:
+      url: http://localhost:8080/notes/{target_id}
+      method: DELETE
+    response:
+      status_code: 200
+      json:
+        status: 200
+        message: "Success"
+
+  - name: (Post Process) Confirm there is no note
+    request:
+      url: http://localhost:8080/notes
+      method: GET
+    response:
+      status_code: 200
+      json:
+        []
