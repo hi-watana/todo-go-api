@@ -3,22 +3,12 @@ info:
   description: "This is a simple -- even too simple -- API implemented by Go."
   version: "1.0.0"
   title: "Todo API with GO"
-  #termsOfService: "http://swagger.io/terms/"
-  #contact:
-  #  email: "apiteam@swagger.io"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "localhost:8080"
-#basePath: "/v2"
+#basePath: "/v1"
 tags:
 - name: "notes"
   description: "Everything about your notes"
-  #externalDocs:
-  #  description: "Find out more"
-  #  url: "http://swagger.io"
 schemes:
-#- "https"
 - "http"
 paths:
   /notes:
@@ -184,6 +174,3 @@ definitions:
         format: "int32"
       message:
         type: "string"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
