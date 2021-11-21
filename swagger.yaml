@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: "This is a simple -- even too simple -- API implemented by Go."
   version: "1.0.0"
-  title: "Swagger Petstore"
+  title: "Todo API with GO"
   #termsOfService: "http://swagger.io/terms/"
   #contact:
   #  email: "apiteam@swagger.io"
