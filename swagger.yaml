@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  description: This is a simple -- even too simple -- API implemented by Go.
+  description: This is a simple -- even too simple -- API for storing todo notes.
   version: 1.0.0
-  title: Todo API with Go
+  title: Simple Todo API
 servers: 
   - url: http://localhost:8080
 tags:
