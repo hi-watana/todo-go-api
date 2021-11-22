@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
   description: This is a simple -- even too simple -- API for storing todo notes.
   version: 1.0.0
@@ -45,6 +45,12 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
         '400':
           description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '500':
+          description: Unexpected error
           content:
             application/json:
               schema:
@@ -123,6 +129,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
+        '500':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
     
     delete:
       tags:
@@ -152,6 +164,12 @@ paths:
                 $ref: '#/components/schemas/ApiResponse'
         '404':
           description: Note not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '500':
+          description: Unexpected error
           content:
             application/json:
               schema:

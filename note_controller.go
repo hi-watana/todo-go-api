@@ -66,7 +66,7 @@ func (nc *NoteController) Create(c *gin.Context) {
 		return
 	}
 	if errors.Is(err, &InternalError{}) {
-		response := ApiResponse{500, "Failed to insert data"}
+		response := ApiResponse{500, "Unexpected error"}
 		c.IndentedJSON(http.StatusInternalServerError, response)
 		return
 	}
@@ -102,7 +102,7 @@ func (nc *NoteController) Update(c *gin.Context) {
 		return
 	}
 	if errors.Is(err, &InternalError{}) {
-		response := ApiResponse{500, "Failed to update data"}
+		response := ApiResponse{500, "Unexpected error"}
 		c.IndentedJSON(http.StatusInternalServerError, response)
 		return
 	}
@@ -124,7 +124,7 @@ func (nc *NoteController) Delete(c *gin.Context) {
 		return
 	}
 	if deleted := nc.noteService.Delete(id); !deleted {
-		response := ApiResponse{500, "Failed to delete data"}
+		response := ApiResponse{500, "Unexpected error"}
 		c.IndentedJSON(http.StatusInternalServerError, response)
 		return
 	}

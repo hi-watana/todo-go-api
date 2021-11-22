@@ -191,7 +191,7 @@ func TestNoteController_Create(t *testing.T) {
 			},
 		},
 		{
-			title: "Returns \"Failed to insert data\" message",
+			title: "Returns \"Unexpected error\" message",
 			requestBody: noteToBytes(Note{
 				Title:   "test_title",
 				Content: "test_content",
@@ -204,7 +204,7 @@ func TestNoteController_Create(t *testing.T) {
 			expectedStatus: http.StatusInternalServerError,
 			expectedResponseObject: &ApiResponse{
 				Status:  500,
-				Message: "Failed to insert data",
+				Message: "Unexpected error",
 			},
 		},
 	} {
@@ -323,7 +323,7 @@ func TestNoteController_Update(t *testing.T) {
 			},
 		},
 		{
-			title:              "Returns \"Failed to update data\" message",
+			title:              "Returns \"Unexpected error\" message",
 			inputId:            1,
 			inputPathParameter: "1",
 			requestBody: noteToBytes(Note{
@@ -339,7 +339,7 @@ func TestNoteController_Update(t *testing.T) {
 			expectedStatus: http.StatusInternalServerError,
 			expectedResponseObject: &ApiResponse{
 				Status:  500,
-				Message: "Failed to update data",
+				Message: "Unexpected error",
 			},
 		},
 	} {
@@ -408,7 +408,7 @@ func TestNoteController_Delete(t *testing.T) {
 			},
 		},
 		{
-			title:              "Returns \"Failed to delete data\" message",
+			title:              "Returns \"Unexpected error\" message",
 			inputId:            1,
 			inputPathParameter: "1",
 			found:              true,
@@ -416,7 +416,7 @@ func TestNoteController_Delete(t *testing.T) {
 			expectedStatus:     http.StatusInternalServerError,
 			expectedResponseObject: &ApiResponse{
 				Status:  500,
-				Message: "Failed to delete data",
+				Message: "Unexpected error",
 			},
 		},
 	} {
