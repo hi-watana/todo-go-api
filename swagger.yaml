@@ -1,13 +1,13 @@
 openapi: 3.0.3
 info:
-  description: This is a simple -- even too simple -- API for storing todo notes.
+  description: This is a simple -- even too simple -- API for todo notes.
   version: 1.0.0
   title: Simple Todo API
 servers: 
   - url: http://localhost:8080
 tags:
-- name: notes
-  description: Everything about your notes
+  - name: notes
+    description: Everything about your notes
 paths:
   /notes:
     get:
@@ -26,7 +26,7 @@ paths:
                   $ref: '#/components/schemas/Note'
     post:
       tags:
-      - notes
+        - notes
       summary: Add a new note
       description: Tries to craete a new note and returns a message
       requestBody:
@@ -59,7 +59,7 @@ paths:
   /notes/{noteId}:
     get:
       tags:
-      - notes
+        - notes
       summary: Find note by ID
       description: Returns a single note
       parameters:
@@ -92,7 +92,7 @@ paths:
           
     put:
       tags:
-      - notes
+        - notes
       summary: Update an existing note
       description: Tries to update a note and returns a message.
       parameters:
@@ -138,7 +138,7 @@ paths:
     
     delete:
       tags:
-      - notes
+        - notes
       summary: Deletes a note
       description: Tries to delete a note and returns a message
       parameters:
