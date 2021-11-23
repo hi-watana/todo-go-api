@@ -1,15 +1,15 @@
 package main
 
 const (
-	UNSPECIFIED_ID uint = 0
+	UNSPECIFIED_ID uint64 = 0
 )
 
 type INoteService interface {
 	Get() []Note
-	GetById(id uint) (Note, bool)
-	Create(note Note) (uint, error)
-	Update(id uint, note Note) (uint, error)
-	Delete(id uint) bool
+	GetById(id uint64) (Note, bool)
+	Create(note Note) (uint64, error)
+	Update(id uint64, note Note) (uint64, error)
+	Delete(id uint64) bool
 }
 
 type NoteService struct {
@@ -21,12 +21,12 @@ func (ns *NoteService) Get() []Note {
 	return notes
 }
 
-func (ns *NoteService) GetById(id uint) (Note, bool) {
+func (ns *NoteService) GetById(id uint64) (Note, bool) {
 	note, found := ns.noteRepository.GetById(id)
 	return note, found
 }
 
-func (ns *NoteService) Create(note Note) (uint, error) {
+func (ns *NoteService) Create(note Note) (uint64, error) {
 	if note.ID != UNSPECIFIED_ID {
 		return UNSPECIFIED_ID, &IllegalIdError{}
 	}
@@ -38,7 +38,7 @@ func (ns *NoteService) Create(note Note) (uint, error) {
 	return id, nil
 }
 
-func (ns *NoteService) Update(id uint, note Note) (uint, error) {
+func (ns *NoteService) Update(id uint64, note Note) (uint64, error) {
 	if note.ID != UNSPECIFIED_ID {
 		return UNSPECIFIED_ID, &IllegalIdError{}
 	}
@@ -50,7 +50,7 @@ func (ns *NoteService) Update(id uint, note Note) (uint, error) {
 	return id, nil
 }
 
-func (ns *NoteService) Delete(id uint) bool {
+func (ns *NoteService) Delete(id uint64) bool {
 	ok := ns.noteRepository.Delete(id)
 	return ok
 }

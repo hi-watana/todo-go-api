@@ -21,22 +21,22 @@ func (ms *MockService) Get() []Note {
 	return ret.Get(0).([]Note)
 }
 
-func (ms *MockService) GetById(id uint) (Note, bool) {
+func (ms *MockService) GetById(id uint64) (Note, bool) {
 	ret := ms.Called(id)
 	return ret.Get(0).(Note), ret.Get(1).(bool)
 }
 
-func (ms *MockService) Create(note Note) (uint, error) {
+func (ms *MockService) Create(note Note) (uint64, error) {
 	ret := ms.Called(note)
-	return ret.Get(0).(uint), ret.Error(1)
+	return ret.Get(0).(uint64), ret.Error(1)
 }
 
-func (ms *MockService) Update(id uint, note Note) (uint, error) {
+func (ms *MockService) Update(id uint64, note Note) (uint64, error) {
 	ret := ms.Called(id, note)
-	return ret.Get(0).(uint), ret.Error(1)
+	return ret.Get(0).(uint64), ret.Error(1)
 }
 
-func (ms *MockService) Delete(id uint) bool {
+func (ms *MockService) Delete(id uint64) bool {
 	ret := ms.Called(id)
 	return ret.Get(0).(bool)
 }
@@ -62,7 +62,7 @@ func TestNoteController_Get(t *testing.T) {
 func TestNoteController_GetById(t *testing.T) {
 	for _, td := range []struct {
 		title                  string
-		inputId                uint
+		inputId                uint64
 		inputPathParameter     string
 		outputNote             Note
 		outputOk               bool
@@ -214,7 +214,7 @@ func TestNoteController_Create(t *testing.T) {
 			response := httptest.NewRecorder()
 			ginContext, _ := gin.CreateTestContext(response)
 
-			var id uint = 1
+			var id uint64 = 1
 			mockService.On("Create", td.inputNote).Return(id, td.outputError)
 
 			req, _ := http.NewRequest("POST", "/notes/", bytes.NewReader(td.requestBody))
@@ -232,7 +232,7 @@ func TestNoteController_Create(t *testing.T) {
 func TestNoteController_Update(t *testing.T) {
 	for _, td := range []struct {
 		title                  string
-		inputId                uint
+		inputId                uint64
 		inputPathParameter     string
 		requestBody            []byte
 		inputNote              Note
@@ -368,7 +368,7 @@ func TestNoteController_Update(t *testing.T) {
 func TestNoteController_Delete(t *testing.T) {
 	for _, td := range []struct {
 		title                  string
-		inputId                uint
+		inputId                uint64
 		inputPathParameter     string
 		found                  bool
 		outputOk               bool

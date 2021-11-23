@@ -16,22 +16,22 @@ func (mr *MockRepository) GetAll() []Note {
 	return ret.Get(0).([]Note)
 }
 
-func (mr *MockRepository) GetById(id uint) (Note, bool) {
+func (mr *MockRepository) GetById(id uint64) (Note, bool) {
 	ret := mr.Called(id)
 	return ret.Get(0).(Note), ret.Get(1).(bool)
 }
 
-func (mr *MockRepository) Create(note Note) (uint, bool) {
+func (mr *MockRepository) Create(note Note) (uint64, bool) {
 	ret := mr.Called(note)
-	return ret.Get(0).(uint), ret.Get(1).(bool)
+	return ret.Get(0).(uint64), ret.Get(1).(bool)
 }
 
-func (mr *MockRepository) Update(id uint, note Note) (uint, bool) {
+func (mr *MockRepository) Update(id uint64, note Note) (uint64, bool) {
 	ret := mr.Called(id, note)
-	return ret.Get(0).(uint), ret.Get(1).(bool)
+	return ret.Get(0).(uint64), ret.Get(1).(bool)
 }
 
-func (mr *MockRepository) Delete(id uint) bool {
+func (mr *MockRepository) Delete(id uint64) bool {
 	ret := mr.Called(id)
 	return ret.Get(0).(bool)
 }
@@ -57,7 +57,7 @@ func TestNoteService_Get(t *testing.T) {
 func TestNoteService_GetById(t *testing.T) {
 	for _, td := range []struct {
 		title string
-		inputId uint
+		inputId uint64
 		outputNote Note
 		outputOk bool
 	} {
@@ -96,7 +96,7 @@ func TestNoteService_Create(t *testing.T) {
 		title string
 		inputNote Note
 		okFromRepository bool
-		outputId uint
+		outputId uint64
 		outputError error
 	} {
 		{
@@ -145,10 +145,10 @@ func TestNoteService_Create(t *testing.T) {
 func TestNoteService_Update(t *testing.T) {
 	for _, td := range []struct {
 		title string
-		inputId uint
+		inputId uint64
 		inputNote Note
 		okFromRepository bool
-		outputId uint
+		outputId uint64
 		outputError error
 	} {
 		{
@@ -200,7 +200,7 @@ func TestNoteService_Update(t *testing.T) {
 func TestNoteService_Delete(t *testing.T) {
 	for _, td := range []struct {
 		title string
-		inputId uint
+		inputId uint64
 		outputOk bool
 	} {
 		{

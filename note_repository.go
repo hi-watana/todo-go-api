@@ -8,10 +8,10 @@ import (
 
 type INoteRepository interface {
 	GetAll() []Note
-	GetById(id uint) (Note, bool)
-	Create(note Note) (uint, bool)
-	Update(id uint, note Note) (uint, bool)
-	Delete(id uint) bool
+	GetById(id uint64) (Note, bool)
+	Create(note Note) (uint64, bool)
+	Update(id uint64, note Note) (uint64, bool)
+	Delete(id uint64) bool
 }
 
 type NoteRepository struct {
@@ -24,7 +24,7 @@ func (nr *NoteRepository) GetAll() []Note {
 	return notes
 }
 
-func (nr *NoteRepository) GetById(id uint) (Note, bool) {
+func (nr *NoteRepository) GetById(id uint64) (Note, bool) {
 	var note Note
 	result := nr.db.First(&note, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
@@ -33,7 +33,7 @@ func (nr *NoteRepository) GetById(id uint) (Note, bool) {
 	return note, true
 }
 
-func (nr *NoteRepository) Create(note Note) (uint, bool) {
+func (nr *NoteRepository) Create(note Note) (uint64, bool) {
 	result := nr.db.Create(&note)
 	if result.Error != nil {
 		return 0, false
@@ -41,7 +41,7 @@ func (nr *NoteRepository) Create(note Note) (uint, bool) {
 	return note.ID, true
 }
 
-func (nr *NoteRepository) Update(id uint, note Note) (uint, bool) {
+func (nr *NoteRepository) Update(id uint64, note Note) (uint64, bool) {
 	result := nr.db.Model(&Note{ID: id}).Updates(note)
 	if result.Error != nil {
 		return 0, false
@@ -49,7 +49,7 @@ func (nr *NoteRepository) Update(id uint, note Note) (uint, bool) {
 	return id, true
 }
 
-func (nr *NoteRepository) Delete(id uint) bool {
+func (nr *NoteRepository) Delete(id uint64) bool {
 	if result := nr.db.Delete(&Note{}, id); result.Error != nil {
 		return false
 	}

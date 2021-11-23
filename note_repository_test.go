@@ -33,10 +33,10 @@ func (ts *NoteRepositoryTestSuite) TearDownTest() {
 
 func (ts *NoteRepositoryTestSuite) TestNoteRepository_GetAll() {
 	var (
-		id       uint = 1
+		id       uint64 = 1
 		title         = "title"
 		content       = "content"
-		id2      uint = 2
+		id2      uint64 = 2
 		title2        = "title2"
 		content2      = "content3"
 	)
@@ -61,7 +61,7 @@ func (ts *NoteRepositoryTestSuite) TestNoteRepository_GetAll() {
 func (ts *NoteRepositoryTestSuite) TestNoteRepository_GetById() {
 	for _, td := range []struct {
 		title        string
-		inputId      uint
+		inputId      uint64
 		outputRows   *sqlmock.Rows
 		expectedNote Note
 		expectedOk   bool
@@ -99,7 +99,7 @@ func (ts *NoteRepositoryTestSuite) TestNoteRepository_GetById() {
 
 func (ts *NoteRepositoryTestSuite) TestNoteRepository_Create_success() {
 	var (
-		id   uint = 1
+		id   uint64 = 1
 		note      = Note{
 			Title:   "test_title",
 			Content: "test_content",
@@ -141,7 +141,7 @@ func (ts *NoteRepositoryTestSuite) TestNoteRepository_Create_failed() {
 
 func (ts *NoteRepositoryTestSuite) TestNoteRepository_Update_success() {
 	var (
-		id   uint = 1
+		id   uint64 = 1
 		note      = Note{
 			Title:   "test_title",
 			Content: "test_content",
@@ -162,7 +162,7 @@ func (ts *NoteRepositoryTestSuite) TestNoteRepository_Update_success() {
 
 func (ts *NoteRepositoryTestSuite) TestNoteRepository_Update_failed() {
 	var (
-		id   uint = 1
+		id   uint64 = 1
 		note      = Note{
 			Title:   "test_title",
 			Content: "test_content",
@@ -183,7 +183,7 @@ func (ts *NoteRepositoryTestSuite) TestNoteRepository_Update_failed() {
 
 func (ts *NoteRepositoryTestSuite) TestNoteRepository_Delete_success() {
 	var (
-		id uint = 1
+		id uint64 = 1
 	)
 	ts.mock.ExpectBegin()
 	ts.mock.ExpectCommit()
@@ -199,7 +199,7 @@ func (ts *NoteRepositoryTestSuite) TestNoteRepository_Delete_success() {
 
 func (ts *NoteRepositoryTestSuite) TestNoteRepository_Delete_failed() {
 	var (
-		id uint = 1
+		id uint64 = 1
 	)
 	ts.mock.ExpectBegin()
 	ts.mock.ExpectCommit()

@@ -20,12 +20,11 @@ type NoteController struct {
 	noteService INoteService
 }
 
-func getIdFromParamString(idString string) (uint, error) {
-	i64, err := strconv.ParseUint(idString, 10, 32)
+func getIdFromParamString(idString string) (uint64, error) {
+	id, err := strconv.ParseUint(idString, 10, 64)
 	if err != nil {
 		return 0, err
 	}
-	id := uint(i64)
 	return id, nil
 }
 
