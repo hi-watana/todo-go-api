@@ -39,7 +39,7 @@ func (ns *NoteService) Create(note Note) (uint, error) {
 }
 
 func (ns *NoteService) Update(id uint, note Note) (uint, error) {
-	if note.ID != 0 && note.ID != id {
+	if note.ID != UNSPECIFIED_ID {
 		return UNSPECIFIED_ID, &IllegalIdError{}
 	}
 

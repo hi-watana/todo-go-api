@@ -163,18 +163,6 @@ func TestNoteService_Update(t *testing.T) {
 			outputError: nil,
 		},
 		{
-			title: "Returns ID and nil if ID in request body and that in path is the same and successfully updated",
-			inputId: 1,
-			inputNote: Note{
-				ID: 1,
-				Title: "test_title",
-				Content: "test_content",
-			},
-			okFromRepository: true,
-			outputId: 1,
-			outputError: nil,
-		},
-		{
 			title: "Returns 0 and IllegalIdError if ID in request body and that in path is not the same",
 			inputId: 1,
 			inputNote: Note{
