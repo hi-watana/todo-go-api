@@ -12,7 +12,7 @@ paths:
   /notes:
     get:
       tags:
-      - notes
+        - notes
       summary: Find all notes
       description: Returns all notes
       responses:
