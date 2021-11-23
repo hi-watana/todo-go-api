@@ -27,12 +27,13 @@ func main() {
 	noteController := NoteController{noteService}
 
 	router := gin.Default()
+	group := router.Group("/v1")
 
-	router.GET("/notes", noteController.Get)
-	router.GET("/notes/:id", noteController.GetById)
-	router.POST("/notes", noteController.Create)
-	router.PUT("/notes/:id", noteController.Update)
-	router.DELETE("/notes/:id", noteController.Delete)
+	group.GET("/notes", noteController.Get)
+	group.GET("/notes/:id", noteController.GetById)
+	group.POST("/notes", noteController.Create)
+	group.PUT("/notes/:id", noteController.Update)
+	group.DELETE("/notes/:id", noteController.Delete)
 
 	router.Run(":8080")
 }

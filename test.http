@@ -1,12 +1,12 @@
-GET http://localhost:8080/notes
+GET http://localhost:8080/v1/notes
 
 ###
 
-GET http://localhost:8080/notes/1
+GET http://localhost:8080/v1/notes/1
 
 ###
 
-POST http://localhost:8080/notes
+POST http://localhost:8080/v1/notes
 
 {
   "title": "title",
@@ -15,7 +15,7 @@ POST http://localhost:8080/notes
 
 ###
 
-PUT http://localhost:8080/notes/1
+PUT http://localhost:8080/v1/notes/1
 
 {
   "title": "title2",
@@ -24,4 +24,4 @@ PUT http://localhost:8080/notes/1
 
 ###
 
-DELETE http://localhost:8080/notes/1
+DELETE http://localhost:8080/v1/notes/1
